@@ -29,6 +29,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		UCameraComponent* FollowCamera;
 
+	void MoveX(float scale);
+	void MoveY(float scale);
+
+	bool bDead;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

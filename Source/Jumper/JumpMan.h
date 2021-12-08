@@ -29,8 +29,24 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		UCameraComponent* FollowCamera;
 
-	void MoveX(float scale);
-	void MoveY(float scale);
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float Power;
+
+	UPROPERTY(EditAnywhere)
+		float Power_Threshold;
+
+	UFUNCTION()
+		void OnBeginOverlap(
+			class UPrimitiveComponent* HitComponent, 
+			class AActor* OtherActor, 
+			class UPrimitiveComponent* OtherComponent, 
+			int32 OtherBodyIndex,
+			bool bFromSweep,
+			const FHitResult& SweepResult
+		);
+
+	void MoveX(float Scale);
+	void MoveY(float Scale);
 
 	bool bDead;
 

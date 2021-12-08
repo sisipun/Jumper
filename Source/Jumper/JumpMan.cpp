@@ -28,6 +28,7 @@ AJumpMan::AJumpMan()
 	FollowCamera->bUsePawnControlRotation = false;
 
 	bDead = false;
+	Power = 100.0f;
 }
 
 // Called when the game starts or when spawned
@@ -35,6 +36,7 @@ void AJumpMan::BeginPlay()
 {
 	Super::BeginPlay();
 
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AJumpMan::OnBeginOverlap);
 }
 
 // Called every frame
@@ -59,8 +61,7 @@ void AJumpMan::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MoveY", this, &AJumpMan::MoveY);
 }
 
-
-void AJumpMan::MoveX(float scale)
+void AJumpMan::MoveX(float Scale)
 {
 	if (!bDead)
 	{
@@ -68,11 +69,11 @@ void AJumpMan::MoveX(float scale)
 		const FRotator YawRotation(0.0f, Rotation.Yaw, 0.0f);
 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		AddMovementInput(Direction, scale);
+		AddMovementInput(Direction, Scale);
 	}
 }
 
-void AJumpMan::MoveY(float scale)
+void AJumpMan::MoveY(float Scale)
 {
 	if (!bDead)
 	{
@@ -80,6 +81,28 @@ void AJumpMan::MoveY(float scale)
 		const FRotator YawRotation(0.0f, Rotation.Yaw, 0.0f);
 
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		AddMovementInput(Direction, scale);
+		AddMovementInput(Direction, Scale);
+	}
+}
+
+void AJumpMan::OnBeginOverlap(
+	UPrimitiveComponent* HitComponent,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult
+)
+{
+	if (OtherActor->ActorHasTag("Recharge"))
+	{
+		Power += 10.0f;
+
+		if (Power > 100.0f)
+		{
+			Power = 100.0f;
+		}
+
+		OtherActor->Destroy();
 	}
 }

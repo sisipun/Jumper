@@ -37,6 +37,11 @@ void AJumpMan::BeginPlay()
 	Super::BeginPlay();
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AJumpMan::OnBeginOverlap);
+	if (Player_Power_Widget_Class != nullptr)
+	{
+		Player_Power_Widget = CreateWidget(GetWorld(), Player_Power_Widget_Class);
+		Player_Power_Widget->AddToViewport();
+	}
 }
 
 // Called every frame
@@ -44,6 +49,7 @@ void AJumpMan::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	Power -= DeltaTime * Power_Threshold;
 }
 
 // Called to bind functionality to input

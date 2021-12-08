@@ -35,6 +35,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		float Power_Threshold;
 
+	UPROPERTY(EditAnywhere, Category = "UI HUD")
+		TSubclassOf<UUserWidget> Player_Power_Widget_Class;
+
 	UFUNCTION()
 		void OnBeginOverlap(
 			class UPrimitiveComponent* HitComponent, 
@@ -49,6 +52,7 @@ public:
 	void MoveY(float Scale);
 
 	bool bDead;
+	UUserWidget* Player_Power_Widget;
 
 protected:
 	// Called when the game starts or when spawned

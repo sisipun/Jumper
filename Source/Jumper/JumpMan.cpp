@@ -2,6 +2,9 @@
 
 
 #include "JumpMan.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
 
 AJumpMan::AJumpMan()
 {
@@ -50,6 +53,17 @@ void AJumpMan::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	Power -= DeltaTime * Power_Threshold;
+	if (Power <= 0)
+	{
+		Power = 0;
+		if (!bDead)
+		{
+			bDead = true;
+			GetMesh()->SetSimulatePhysics(true);
+			FTimerHandle RestartHandle;
+			GetWorldTimerManager().SetTimer(RestartHandle, this, &AJumpMan::RestartLevel, 3.0f, false);
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -89,6 +103,11 @@ void AJumpMan::MoveY(float Scale)
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(Direction, Scale);
 	}
+}
+
+void AJumpMan::RestartLevel()
+{
+	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 }
 
 void AJumpMan::OnBeginOverlap(

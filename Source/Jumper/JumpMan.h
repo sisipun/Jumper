@@ -20,8 +20,6 @@ class JUMPER_API AJumpMan : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
-	AJumpMan();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		USpringArmComponent* CameraBoom;
@@ -48,8 +46,12 @@ public:
 			const FHitResult& SweepResult
 		);
 
+	// Sets default values for this character's properties
+	AJumpMan();
+
 	void MoveX(float Scale);
 	void MoveY(float Scale);
+	void RestartLevel();
 
 	bool bDead;
 	UUserWidget* Player_Power_Widget;

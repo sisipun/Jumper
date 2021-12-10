@@ -58,10 +58,7 @@ void AJumpMan::Tick(float DeltaTime)
 		Power = 0;
 		if (!bDead)
 		{
-			bDead = true;
-			GetMesh()->SetSimulatePhysics(true);
-			FTimerHandle RestartHandle;
-			GetWorldTimerManager().SetTimer(RestartHandle, this, &AJumpMan::RestartLevel, 3.0f, false);
+			Die();
 		}
 	}
 }
@@ -130,4 +127,16 @@ void AJumpMan::OnBeginOverlap(
 
 		OtherActor->Destroy();
 	}
+	else if (OtherActor->ActorHasTag("Enemy"))
+	{
+		Die();
+	}
+}
+
+void AJumpMan::Die()
+{
+	bDead = true;
+	GetMesh()->SetSimulatePhysics(true);
+	FTimerHandle RestartHandle;
+	GetWorldTimerManager().SetTimer(RestartHandle, this, &AJumpMan::RestartLevel, 3.0f, false);
 }

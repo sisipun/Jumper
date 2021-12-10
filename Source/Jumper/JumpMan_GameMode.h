@@ -20,6 +20,9 @@ public:
 		TSubclassOf<APawn> Player_Recharge;
 
 	UPROPERTY(EditAnywhere)
+		TSubclassOf<APawn> Enemy;
+
+	UPROPERTY(EditAnywhere)
 		float Spawn_X_Min;
 
 	UPROPERTY(EditAnywhere)
@@ -36,7 +39,11 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
-	void SpawnPlayerRacharge();
+	void SpawnPlayerRecharge();
+	void SpawnEnemy();
 
 	float Spawn_Z = 500.0f;
+
+private:
+	void Spawn(TSubclassOf<APawn> Pawn);
 };

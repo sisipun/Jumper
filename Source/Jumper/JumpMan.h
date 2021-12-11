@@ -30,8 +30,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		float Power;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		int Score;
+
 	UPROPERTY(EditAnywhere)
 		float Power_Threshold;
+
+	UPROPERTY(EditAnywhere)
+		int Score_Threshold;
 
 	UPROPERTY(EditAnywhere, Category = "UI HUD")
 		TSubclassOf<UUserWidget> Player_Power_Widget_Class;

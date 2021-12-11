@@ -51,15 +51,17 @@ void AJumpMan::BeginPlay()
 void AJumpMan::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (bDead)
+	{
+		return;
+	}
 
 	Power -= DeltaTime * Power_Threshold;
+	Score += DeltaTime * Score_Threshold;
 	if (Power <= 0)
 	{
 		Power = 0;
-		if (!bDead)
-		{
-			Die();
-		}
+		Die();
 	}
 }
 

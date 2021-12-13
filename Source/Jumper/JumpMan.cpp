@@ -121,6 +121,8 @@ void AJumpMan::OnBeginOverlap(
 	if (OtherActor->ActorHasTag("Recharge"))
 	{
 		Power += 10.0f;
+		GetCharacterMovement()->Velocity.Z = 100.0f;
+		GetCharacterMovement()->SetMovementMode(MOVE_Falling);
 
 		if (Power > 100.0f)
 		{

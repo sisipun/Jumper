@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -27,20 +25,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		UCameraComponent* FollowCamera;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		float Power;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int Score;
-
 	UPROPERTY(EditAnywhere)
-		float Power_Threshold;
-
-	UPROPERTY(EditAnywhere)
-		int Score_Threshold;
-
-	UPROPERTY(EditAnywhere, Category = "UI HUD")
-		TSubclassOf<UUserWidget> Player_Power_Widget_Class;
+		float Collect_Impulse_Threshold;
 
 	UFUNCTION()
 		void OnBeginOverlap(
@@ -58,7 +44,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
 	void MoveX(float Scale);
 	void MoveY(float Scale);
 	void RestartLevel();
@@ -67,6 +52,5 @@ private:
 	void Die();
 
 	bool bDead;
-	UUserWidget* Player_Power_Widget;
 
 };

@@ -1,7 +1,5 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "JumpMan.h"
+#include "Booster.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/GameplayStatics.h"
@@ -31,23 +29,15 @@ AJumpMan::AJumpMan()
 	FollowCamera->bUsePawnControlRotation = false;
 
 	bDead = false;
-	Power = 100.0f;
 }
 
-// Called when the game starts or when spawned
 void AJumpMan::BeginPlay()
 {
 	Super::BeginPlay();
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AJumpMan::OnBeginOverlap);
-	if (Player_Power_Widget_Class != nullptr)
-	{
-		Player_Power_Widget = CreateWidget(GetWorld(), Player_Power_Widget_Class);
-		Player_Power_Widget->AddToViewport();
-	}
 }
 
-// Called every frame
 void AJumpMan::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -55,17 +45,8 @@ void AJumpMan::Tick(float DeltaTime)
 	{
 		return;
 	}
-
-	Power -= DeltaTime * Power_Threshold;
-	Score += DeltaTime * Score_Threshold;
-	if (Power <= 0)
-	{
-		Power = 0;
-		Die();
-	}
 }
 
-// Called to bind functionality to input
 void AJumpMan::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -118,22 +99,11 @@ void AJumpMan::OnBeginOverlap(
 	const FHitResult& SweepResult
 )
 {
-	if (OtherActor->ActorHasTag("Recharge"))
+	if (Cast<ABooster>(OtherActor) != nullptr)
 	{
-		Power += 10.0f;
 		GetCharacterMovement()->Velocity.Z = 100.0f;
 		GetCharacterMovement()->SetMovementMode(MOVE_Falling);
-
-		if (Power > 100.0f)
-		{
-			Power = 100.0f;
-		}
-
 		OtherActor->Destroy();
-	}
-	else if (OtherActor->ActorHasTag("Enemy"))
-	{
-		Die();
 	}
 }
 

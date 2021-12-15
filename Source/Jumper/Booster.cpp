@@ -16,6 +16,5 @@ void ABooster::BeginPlay()
 void ABooster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 

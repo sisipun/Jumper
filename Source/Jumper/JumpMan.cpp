@@ -16,7 +16,7 @@ AJumpMan::AJumpMan()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 0.0f);
 	GetCharacterMovement()->JumpZVelocity = 600.0f;
-	GetCharacterMovement()->AirControl = 0.2f;
+	GetCharacterMovement()->AirControl = 0.5f;
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -41,24 +41,20 @@ void AJumpMan::BeginPlay()
 void AJumpMan::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bDead)
-	{
-		return;
-	}
 }
 
 void AJumpMan::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &APawn::AddControllerYawInput);
+	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &APawn::AddControllerPitchInput);
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Released, this, &ACharacter::StopJumping);
 
-	PlayerInputComponent->BindAxis("MoveX", this, &AJumpMan::MoveX);
-	PlayerInputComponent->BindAxis("MoveY", this, &AJumpMan::MoveY);
+	PlayerInputComponent->BindAxis(TEXT("MoveX"), this, &AJumpMan::MoveX);
+	PlayerInputComponent->BindAxis(TEXT("MoveY"), this, &AJumpMan::MoveY);
 }
 
 void AJumpMan::MoveX(float Scale)
@@ -99,11 +95,24 @@ void AJumpMan::OnBeginOverlap(
 	const FHitResult& SweepResult
 )
 {
-	if (Cast<ABooster>(OtherActor) != nullptr)
+	if (bDead)
 	{
-		GetCharacterMovement()->Velocity.Z = 100.0f;
+		return;
+	}
+
+	if(OtherActor->ActorHasTag(TEXT("Booster")))
+	{
+		GetCharacterMovement()->Velocity.Z = BoosterThreshold;
 		GetCharacterMovement()->SetMovementMode(MOVE_Falling);
 		OtherActor->Destroy();
+	}
+	else if (OtherActor->ActorHasTag(TEXT("Floor")))
+	{
+		Die();
+	}
+	else if (OtherActor->ActorHasTag(TEXT("Finish")))
+	{
+		RestartLevel();
 	}
 }
 
@@ -112,5 +121,5 @@ void AJumpMan::Die()
 	bDead = true;
 	GetMesh()->SetSimulatePhysics(true);
 	FTimerHandle RestartHandle;
-	GetWorldTimerManager().SetTimer(RestartHandle, this, &AJumpMan::RestartLevel, 3.0f, false);
+	GetWorldTimerManager().SetTimer(RestartHandle, this, &AJumpMan::RestartLevel, 2.0f, false);
 }

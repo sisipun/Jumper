@@ -26,7 +26,7 @@ public:
 		UCameraComponent* FollowCamera;
 
 	UPROPERTY(EditAnywhere)
-		float Collect_Impulse_Threshold;
+		float BoosterThreshold;
 
 	UFUNCTION()
 		void OnBeginOverlap(

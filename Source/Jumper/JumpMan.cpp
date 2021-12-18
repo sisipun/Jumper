@@ -114,5 +114,6 @@ void AJumpMan::Die()
 	bDead = true;
 	GetMesh()->SetSimulatePhysics(true);
 	FTimerHandle RestartHandle;
-	GetWorldTimerManager().SetTimer(RestartHandle, this, &AJumpMan::RestartLevel, 2.0f, false);
+	RestartLevel();
+	//GetWorldTimerManager().SetTimer(RestartHandle, this, &AJumpMan::RestartLevel, 2.0f, false);
 }

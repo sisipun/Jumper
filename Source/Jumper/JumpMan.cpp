@@ -6,8 +6,6 @@
 
 AJumpMan::AJumpMan()
 {
-	PrimaryActorTick.bCanEverTick = true;
-
 	GetCapsuleComponent()->InitCapsuleSize(42.0f, 96.0f);
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -36,11 +34,6 @@ void AJumpMan::BeginPlay()
 	Super::BeginPlay();
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AJumpMan::OnBeginOverlap);
-}
-
-void AJumpMan::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 
 void AJumpMan::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

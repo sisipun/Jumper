@@ -2,8 +2,6 @@
 
 ABooster::ABooster()
 {
-	PrimaryActorTick.bCanEverTick = true;
-
 	Collider = CreateDefaultSubobject<USphereComponent>(TEXT("Collider"));
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 
@@ -16,11 +14,6 @@ void ABooster::BeginPlay()
 	Super::BeginPlay();
 
 	Collider->OnComponentBeginOverlap.AddDynamic(this, &ABooster::OnBeginOverlap);
-}
-
-void ABooster::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 
 void ABooster::OnBeginOverlap(
